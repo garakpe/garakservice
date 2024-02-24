@@ -1,0 +1,105 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+// 날짜 포맷을 위한 intl 패키지 추가
+import 'package:garakservice/api_service.dart'; // 이 부분은 fetchAndParseJson 함수가 정의되어 있는 가정
+
+class SecondPage extends StatelessWidget {
+  final String titleText;
+  final String bodyText;
+
+  const SecondPage({
+    Key? key,
+    required this.titleText,
+    required this.bodyText,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // 현재 날짜와 요일을 포맷팅
+    final now = DateTime.now();
+    final formatter = DateFormat('yyyy년 MM월 dd일 EEEE', 'ko_KR');
+    final formattedDate = formatter.format(now);
+
+    return Scaffold(
+      backgroundColor: Colors.indigo,
+      appBar: AppBar(
+        backgroundColor: Colors.indigo,
+        title: Text(
+          titleText,
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        ), // 페이지 타이틀을 AppBar에 표시
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            flex: 1,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 0.0),
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  formattedDate, // '가락고등학교 급식알리미' 대신 현재 날짜와 요일을 표시
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Expanded(
+            flex: 4,
+            child: Padding(
+              padding: const EdgeInsets.all(0.0),
+              child: Image.asset('assets/images/image0.png'),
+            ),
+          ),
+          Expanded(
+            flex: 4,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    '오늘의 메뉴',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                  ),
+                ),
+                Expanded(
+                  child: FutureBuilder<String>(
+                    future: fetchAndParseJson(), // 비동기 데이터 로딩 함수
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        return SingleChildScrollView(
+                          child: Text(
+                            snapshot.data ?? '',
+                            style: const TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.white,
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
