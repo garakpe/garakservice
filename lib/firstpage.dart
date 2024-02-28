@@ -27,9 +27,7 @@ class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
-    DateTime tomorrow = DateTime(now.year, now.month, now.day + 1);
-    String tomorrowDate =
-        DateFormat('yyyy-MM-dd (E)', 'ko_KR').format(tomorrow);
+    String todayDate = DateFormat('yyyy-MM-dd (E)', 'ko_KR').format(now);
     return Scaffold(
       appBar: AppBar(
         title: const Text('가락고등학교 체육안전부',
@@ -41,7 +39,7 @@ class _FirstPageState extends State<FirstPage> {
           Expanded(
             flex: 2,
             child: CardWidget(
-              cardName: '먼저 먹자\n$tomorrowDate',
+              cardName: '먼저 먹자\n$todayDate',
               color: Colors.indigo,
               additionalInfoFuture: additionalInfoA1,
               textColor: Colors.white,
@@ -102,7 +100,7 @@ class CardWidget extends StatelessWidget {
                 Text(
                   cardName,
                   style: TextStyle(
-                      fontSize: 30.0,
+                      fontSize: 25.0,
                       fontWeight: FontWeight.bold,
                       color: textColor),
                   textAlign: TextAlign.center,
@@ -114,7 +112,7 @@ class CardWidget extends StatelessWidget {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return SpinKitFadingCircle(
                         color: textColor,
-                        size: 30.0,
+                        size: 25.0,
                       );
                     } else if (snapshot.hasError) {
                       return Text("Error: ${snapshot.error}",
@@ -126,7 +124,7 @@ class CardWidget extends StatelessWidget {
                           child: Text(
                             snapshot.data ?? '데이터 없음',
                             style: TextStyle(
-                                fontSize: 30.0, // 고정된 폰트 크기
+                                fontSize: 25.0, // 고정된 폰트 크기
                                 fontWeight: FontWeight.bold,
                                 color: textColor),
                             textAlign: TextAlign.center,
