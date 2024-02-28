@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 // 날짜 포맷을 위한 intl 패키지 추가
-import 'package:garakservice/api_service.dart'; // 이 부분은 fetchAndParseJson 함수가 정의되어 있는 가정
+import 'package:garakservice/api_service.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart'; // 이 부분은 fetchAndParseJson 함수가 정의되어 있는 가정
 
 class SecondPage extends StatelessWidget {
   final String titleText;
@@ -29,7 +30,8 @@ class SecondPage extends StatelessWidget {
           style: const TextStyle(
             color: Colors.white,
           ),
-        ), // 페이지 타이틀을 AppBar에 표시
+        ),
+        centerTitle: true, // 페이지 타이틀을 AppBar에 표시
       ),
       body: Column(
         children: [
@@ -77,17 +79,25 @@ class SecondPage extends StatelessWidget {
                     future: fetchAndParseJson(), // 비동기 데이터 로딩 함수
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
+                        return const SpinKitFadingCircle(
+                          color: Colors.white,
+                          size: 30.0,
+                          duration: Duration(seconds: 2),
+                        );
                       } else if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');
                       } else {
                         return SingleChildScrollView(
-                          child: Text(
-                            snapshot.data ?? '',
-                            style: const TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.white,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Text(
+                              snapshot.data ?? '',
+                              style: const TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         );

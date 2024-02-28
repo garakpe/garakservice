@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:garakservice/meal_order_api.dart';
 import 'package:intl/intl.dart';
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class FirstPage extends StatefulWidget {
   const FirstPage({Key? key}) : super(key: key);
@@ -39,6 +39,7 @@ class _FirstPageState extends State<FirstPage> {
       body: Column(
         children: <Widget>[
           Expanded(
+            flex: 2,
             child: CardWidget(
               cardName: '먼저 먹자\n$tomorrowDate',
               color: Colors.indigo,
@@ -47,6 +48,7 @@ class _FirstPageState extends State<FirstPage> {
             ),
           ),
           Expanded(
+            flex: 3,
             child: CardWidget(
               cardName: '급식실 이용 규칙',
               color: const Color.fromRGBO(66, 169, 155, 1),
@@ -55,9 +57,10 @@ class _FirstPageState extends State<FirstPage> {
             ),
           ),
           Expanded(
+            flex: 3,
             child: CardWidget(
               cardName: '체육안전부 공지',
-              color: const Color.fromRGBO(254, 192, 167, 1),
+              color: Colors.black54,
               additionalInfoFuture: additionalInfoC1,
               textColor: Colors.white,
             ),
@@ -109,19 +112,26 @@ class CardWidget extends StatelessWidget {
                   future: additionalInfoFuture,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator(color: textColor);
+                      return SpinKitFadingCircle(
+                        color: textColor,
+                        size: 30.0,
+                      );
                     } else if (snapshot.hasError) {
                       return Text("Error: ${snapshot.error}",
                           style: TextStyle(color: textColor));
                     } else {
-                      return AutoSizeText(
-                        snapshot.data ?? '데이터 없음',
-                        style: TextStyle(
-                            fontSize: 30.0,
-                            fontWeight: FontWeight.bold,
-                            color: textColor),
-                        textAlign: TextAlign.center,
-                        maxLines: 3,
+                      return Expanded(
+                        // SingleChildScrollView로 변경
+                        child: SingleChildScrollView(
+                          child: Text(
+                            snapshot.data ?? '데이터 없음',
+                            style: TextStyle(
+                                fontSize: 30.0, // 고정된 폰트 크기
+                                fontWeight: FontWeight.bold,
+                                color: textColor),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       );
                     }
                   },
