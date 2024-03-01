@@ -37,7 +37,7 @@ class _FirstPageState extends State<FirstPage> {
       body: Column(
         children: <Widget>[
           Expanded(
-            flex: 2,
+            flex: 3,
             child: CardWidget(
               cardName: '먼저 먹자\n$todayDate',
               color: Colors.indigo,
